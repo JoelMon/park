@@ -67,8 +67,8 @@ mod tests {
 
     #[test]
     fn t_digit_len(){
-        let passed_in:[i32; 9]  = [0, 10, 111, 5_432, 45_463, 256_279, 2_456_783, 65_569_156, 698_456_145];
-        let passed_out:[usize; 9] = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+        let passed_in:[u32; 10]  = [0, 10, 111, 5_432, 45_463, 256_279, 2_456_783, 65_569_156, 698_456_145, 1_479_145_456];
+        let passed_out:[usize; 10] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
         for n in itertools::zip(passed_in, passed_out) {
             assert_eq!(digit_len(n.0), n.1);
