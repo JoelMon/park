@@ -1,4 +1,17 @@
+use std:: usize::MAX;
+
+use thiserror::Error;
+
 use num_integer::Integer;
+
+
+#[derive(Error, Debug)]
+pub enum ParkError {
+    #[error("The number {0} is out of range.")]
+    OutOfRange(String),
+    #[error("Parsing Failed: {0} was able to be parsed into a `usize`")]
+    ParseIntError(String),
+}
 
 /// Returns true when given an integer with an even polarity.
 ///
@@ -56,9 +69,11 @@ pub fn is_odd<N: Integer + Copy>(n: N) -> bool {
 /// let digits = 305;
 /// assert_eq!(digit_len(&digits), 3);
 /// ```
-pub fn digit_len<N: Integer + ToString>(n: &N) -> usize {
+pub fn digit_len<N: Integer + ToString>(n: &N) -> Result<usize, ParkError> {
+    
     let n = n.to_string();
-     n.len()
+    let thing:usize = n.parse::<usize>()?;
+     Ok(n.len())
 }
 
 #[cfg(test)]
