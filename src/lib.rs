@@ -1,4 +1,15 @@
 use num_integer::Integer;
+use thiserror::Error;
+
+#[derive(Error, Debug)]
+pub enum ParkError {
+    #[error("The number {0} is out of range.")]
+    OutOfRange(String),
+    #[error("Parsing Failed: {0} was not able to be parsed into a `usize`")]
+    ParseIntError(String),
+    #[error("an error has occurred")]
+    General,
+}
 
 /// Returns true when given an integer with an even polarity.
 ///
@@ -14,15 +25,13 @@ use num_integer::Integer;
 /// assert_eq!(result, false);
 /// ```
 pub fn is_even<N: Integer + Copy>(n: N) -> bool {
+    // TODO: Negative numbers are odd/even polarized?
+
     let _0 = N::zero();
     let _1 = N::one();
     let _2 = _1 + _1;
 
-    if n % _2 == _0 {
-        return true;
-    } else {
-        return false;
-    }
+    n % _2 == _0
 }
 
 /// Returns true when given an integer with an odd polarity.
@@ -42,36 +51,46 @@ pub fn is_odd<N: Integer + Copy>(n: N) -> bool {
     !is_even(n)
 }
 
-
 /// Returns the number of digits passed in.
-/// 
-/// `digit_len()` takes any integer that implants the [`ToString`](https://doc.rust-lang.org/stable/std/string/trait.ToString.html) 
+///
+/// `digit_len()` takes any integer that implants the [`ToString`](https://doc.rust-lang.org/stable/std/string/trait.ToString.html)
 /// trait and returns the total number of digits.
-/// 
+///
 /// # Example
-/// 
+///
 /// ```rust
 /// use park::digit_len;
-/// 
-/// let digits = 305;
-/// assert_eq!(digit_len(&digits), 3);
+///
+/// assert_eq!(digit_len(&305).unwrap(), 3);
 /// ```
-pub fn digit_len<N: Integer + ToString>(n: &N) -> usize {
+pub fn digit_len<N: Integer + ToString>(n: &N) -> Result<usize, ParkError> {
     let n = n.to_string();
-     n.len()
+    Ok(n.len())
 }
 
 #[cfg(test)]
 mod tests {
     use crate::*;
+    
 
     #[test]
-    fn t_digit_len(){
-        let passed_in:[u32; 10]  = [0, 10, 111, 5_432, 45_463, 256_279, 2_456_783, 65_569_156, 698_456_145, 1_479_145_456];
-        let passed_out:[usize; 10] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+    fn t_digit_len() {
+        let passed_in: [u32; 10] = [
+            0,
+            10,
+            111,
+            5_432,
+            45_463,
+            256_279,
+            2_456_783,
+            65_569_156,
+            698_456_145,
+            1_479_145_456,
+        ];
+        let passed_out: [usize; 10] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
         for n in itertools::zip(passed_in, passed_out) {
-            assert_eq!(digit_len(&n.0), n.1);
+            assert_eq!(digit_len(&n.0).unwrap(), n.1);
         }
     }
     #[test]
