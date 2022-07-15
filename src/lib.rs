@@ -54,9 +54,9 @@ pub fn is_odd<N: Integer + Copy>(n: N) -> bool {
 /// use park::digit_len;
 /// 
 /// let digits = 305;
-/// assert_eq!(digit_len(digits), 3);
+/// assert_eq!(digit_len(&digits), 3);
 /// ```
-pub fn digit_len<N: Integer + ToString>(n: N) -> usize {
+pub fn digit_len<N: Integer + ToString>(n: &N) -> usize {
     let n = n.to_string();
      n.len()
 }
@@ -71,7 +71,7 @@ mod tests {
         let passed_out:[usize; 10] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
         for n in itertools::zip(passed_in, passed_out) {
-            assert_eq!(digit_len(n.0), n.1);
+            assert_eq!(digit_len(&n.0), n.1);
         }
     }
     #[test]
