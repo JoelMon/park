@@ -42,9 +42,38 @@ pub fn is_odd<N: Integer + Copy>(n: N) -> bool {
     !is_even(n)
 }
 
+
+/// Returns the number of digits passed in.
+/// 
+/// `digit_len()` takes any integer that implants the [`ToString`](https://doc.rust-lang.org/stable/std/string/trait.ToString.html) 
+/// trait and returns the total number of digits.
+/// 
+/// # Example
+/// 
+/// ```rust
+/// use park::digit_len;
+/// 
+/// let digits = 305;
+/// assert_eq!(digit_len(digits), 3);
+/// ```
+pub fn digit_len<N: Integer + ToString>(n: N) -> usize {
+    let n = n.to_string();
+     n.len()
+}
+
 #[cfg(test)]
 mod tests {
     use crate::*;
+
+    #[test]
+    fn t_digit_len(){
+        let passed_in:[i32; 9]  = [0, 10, 111, 5_432, 45_463, 256_279, 2_456_783, 65_569_156, 698_456_145];
+        let passed_out:[usize; 9] = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+
+        for n in itertools::zip(passed_in, passed_out) {
+            assert_eq!(digit_len(n.0), n.1);
+        }
+    }
     #[test]
     fn t_is_even() {
         let even_numbers = [0, 2, 4, 8, 10, 100, 5_000, -5_000, -100, -8];

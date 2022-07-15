@@ -7,3 +7,6 @@ edition = "2021"
 
 [dependencies]
 num-integer = "0.1"
+
+[dev-dependencies]
+itertools = "0.10.2"
